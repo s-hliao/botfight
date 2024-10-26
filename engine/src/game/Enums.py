@@ -17,7 +17,7 @@ class Cell(Enum):
     SPACE = 0
     WALL = 1
     APPLE = 2
-    PLAYER1_BODY = 3
-    PLAYER2_BODY = 4
-    PLAYER1_HEAD = 5
-    PLAYER2_HEAD = 6
+    PLAYERA_BODY = 3
+    PLAYERB_BODY = 4
+    PLAYERA_HEAD = 5
+    PLAYERB_HEAD = 6

@@ -1,11 +1,12 @@
 from Queue import queue
-from Enums import Direction
+from Enums import Direction, Move
 
 class player:
     def __init__(self):
         self.q = queue()
         self.direction = None
         self.apples_queued = 0
+        
 
     def start(self, start_loc, start_size):
         blocks.push(start_loc)
@@ -19,3 +20,59 @@ class player:
 
     def get_all_loc(self):
         return q.peek_all()
+
+    def get_direction(self):
+        return self.direction
+
+
+    def get_length(self):
+        return self.q.size + apples_queued
+
+    def get_next_loc(self, action, head_loc=self.get_head_loc(), move_dir = self.direction):
+
+        move_dir = Direction(action)
+      
+        match move_dir:
+            case Direction.NORTH:
+                head_loc[1]-=1
+            case Direction.EAST:
+                head_loc[0]+=1
+            case Direction.SOUTH:
+                head_loc[1]+=1
+            case direction.WEST:
+                head_loc[0]-=1
+            case _:
+                return None
+
+        return head_loc, move_dir
+    
+    def get_valid_actions(self, direction = self.direction):
+
+
+    def eat_apple(self):
+        self.apples_queued += 1
+
+    def push_move(self, action):
+        head_loc = self.get_head_loc()
+
+        match move_dir:
+            case Direction.NORTH:
+                head_loc[1]-=1
+            case Direction.EAST:
+                head_loc[0]+=1
+            case Direction.SOUTH:
+                head_loc[1]+=1
+            case direction.WEST:
+                head_loc[0]-=1
+            case _:
+                return None
+
+        self.q.push(head_loc)
+
+        snake_tail = None
+        if(self.apples_queued == 0):
+            snake_tail = self.q.pop()  
+        else:
+            self.apples_queued-=1
+        
+        return snake_head, snake_tail
