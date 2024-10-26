@@ -1,0 +1,21 @@
+from Queue import queue
+from Enums import Direction
+
+class player:
+    def __init__(self):
+        self.q = queue()
+        self.direction = None
+        self.apples_queued = 0
+
+    def start(self, start_loc, start_size):
+        blocks.push(start_loc)
+        apples_queued = start_size - 1
+        
+    def get_head_loc(self):
+        return q.peek_head()
+
+    def get_tail_loc(self):
+        return q.peek_tail()
+
+    def get_all_loc(self):
+        return q.peek_all()
