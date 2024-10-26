@@ -8,10 +8,6 @@ class Direction(Enum):
     SOUTH = 2
     WEST = 3
 
-class Move(Enum):
-    LEFT = 0
-    FORWARD = 1
-    RIGHT = 2
 
 class Cell(Enum):
     SPACE = 0
