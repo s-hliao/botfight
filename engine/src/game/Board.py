@@ -4,6 +4,10 @@ import copy
 from Player import player
 from Queue import queue
 
+from types import StringType
+from collections import Iterable
+
+
 class Board():
     def __init__(self, map):
         self.player_a = Player()
@@ -11,7 +15,7 @@ class Board():
         self.apple_spawns = Queue(dim=3)
         self.load_map(map)
         self.history = []
-        
+        self.a_to_play = True
 
     def load_map(self, map):
         self.player_a.start(map.startA, np.start_size)
@@ -20,10 +24,36 @@ class Board():
         self.apple_spawns.push(map.apple_spawns)
         self.cells = map.init_board
 
-    # def enum 0 is space, 1 is wall, 2 is apple, 3 is player 1 body, 4 is player 2 body, 5 is player 1 head, 6 is player 2 head
-    # return 
-    def a_move(self, move):
-        if
+    # accepts a tuple
+    # first value is direction moved:
+    # single direction, list of directions, or np.ndarray representing directions
+    # second value is amount sacrificed to make moves
+    def is_valid_move(self, move, a_to_play=self.a_to_play):
+        try:
+            if(len(move!=2)):
+                return False
+
+            actions = move[0]
+            sacrifice = move[1]
+            if(isinstance(actions, Iterable) and not isinstance(actions, StringType)):
+                if(sacrifice  < len(actions) * len(actions)):
+                    return False
+                if(a_to_play):
+                    
+                else:
+            else:
+                if(a_to_play):
+
+                else:
+        catch:
+            return False
+                
+            
+
+
+    def a_move(self, moves):
+        if len(a_move) > 0:
+
 
     def b_move(self, moves):
 

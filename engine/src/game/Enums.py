@@ -1,5 +1,7 @@
 from enum import Enum, auto
 
+
+
 class Direction(Enum):
     NORTH = 0
     EAST = 1
