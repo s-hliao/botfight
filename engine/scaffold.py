@@ -1,5 +1,5 @@
 import pytorch as torch
-class Controller:
+class PlayerController:
     # for the controller to read
     def __init__(self):
         self.usesGPU = False

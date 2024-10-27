@@ -3,12 +3,12 @@ import torch
 import copy
 from Player import player
 from Queue import queue
-from Enums import Move, Direction, Cell
+from Enums import Direction, Cell, Result
 from types import StringType
 from collections import Iterable
 
 
-class Board():
+class board():
     def __init__(self, map):
         self.snake_a = snake()
         self.snake_b = snake()
@@ -19,6 +19,32 @@ class Board():
         self.a_to_play = True
         self.min_player_size = 4
         self.turn_count = 0
+        self.bid_resolved = False
+        self.winner = None
+
+    def a_turn(self):
+        return self.a_to_play
+
+    def tiebreak(self):
+        if(snake_a.get_apples_eaten() > snake_b.get_apples_eaten()):
+            self.winner = Result.PLAYER_A
+        elif(snake_a.get_apples_eaten() < snake_b.get_apples_eaten()):
+            self.winner = Result.PLAYER_B
+        else:
+            if(snake_a.get_length() > snake_b.get_length()):
+                self.winner = Result.PLAYER_A
+            elif(snake_a.get_length() < snake_b.get_length()):
+                self.winner = Result.PLAYER_B
+            
+
+    
+
+
+    def set_winner(self, result):
+        self.winner = result
+
+    def get_winner(self):
+        return self.winner
 
     def load_map(self, map):
         self.snake_a.start(map.startA, map.start_size)
@@ -28,7 +54,7 @@ class Board():
         self.cells = map.init_board
 
 
-    def decide_bid(self, bidA, bidB):
+    def resolve_bid(self, bidA, bidB):
         if (bidB > bidA):
             self.a_to_play = False
         elif(bidB==bidA):
@@ -38,6 +64,10 @@ class Board():
             snake_a.apply_bid(bidA)
         else:
             snake_b.apply_bid(bidB)
+        bid_resolved = True
+
+    def get_bid_resolved(self):
+        return self.get_bid_resolved
 
 
     # accepts a tuple
@@ -111,7 +141,7 @@ class Board():
                                 
     # returns true on full application of all moves if check_validity is on
     # automatically returns true if no checks on
-    def apply_turn(self, moves, a_to_play = self.a_to_play, check_validity = True):
+    def apply_turn(self, moves, check_validity = True):
         player = snake_a if a_to_play else snake_b
 
         if(check_validity):
@@ -129,14 +159,14 @@ class Board():
                     if(sacrifice  < len(actions-1) * len(actions-1)):
                         return False
                     for action in actions:
-                        if not apply_move(action, a_to_play, check_validity=True):
+                        if not apply_move(action, self.a_to_play, check_validity=True):
                             return False
-                    self.turn_count+=1
+                    self.next_turn()
                     return True                
                 else:
-                    valid = apply_move(actions, a_to_play, check_validity=True)   
+                    valid = apply_move(actions, self.a_to_play, check_validity=True)   
                     if valid:
-                        self.turn_count +=1
+                        self.next_turn()
                     return valid   
             except:
                 return False
@@ -147,11 +177,11 @@ class Board():
 
                 if(isinstance(actions, Iterable) and not isinstance(actions, StringType)):
                     for action in actions:
-                        apply_move(action, a_to_play, check_validity = False)
-                    self.turn_count+=1
+                        apply_move(action, self.a_to_play, check_validity = False)
+                    self.next_turn()
                 else:
-                    apply_move(actions, a_to_play, check_validity = False)
-                    self.turn_count+=1
+                    apply_move(actions, self.a_to_play, check_validity = False)
+                    self.next_turn()
                 
                 return True
             except:
@@ -184,6 +214,9 @@ class Board():
             if(snake_tail is not None):
                 self.cells[snake_tail] = int (Cell.SPACE)
 
+    def next_turn(self):
+        self.turn_count+=1
+        self.a_to_play = not self.a_to_play
 
     def getRoundNum():
         return self.turn_count / 2

@@ -1,6 +1,8 @@
 from enum import Enum, auto
-
-
+class Result(Enum):
+    PLAYER_A = 0
+    PLAYER_B = 1
+    TIE = 2
 
 class Direction(Enum):
     NORTH = 0

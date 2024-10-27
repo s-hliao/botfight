@@ -6,6 +6,7 @@ class snake:
         self.q = queue()
         self.direction = None
         self.apples_queued = 0
+        self.apples_eaten = 0
         self.min_player_size = min_player_size
         
 
@@ -54,7 +55,7 @@ class snake:
 
 
     def is_valid_action(self, move, dir):
-        return 0 < int(move) < 4 and (int(dir) + 2) % 4 is not int(move)
+        return 0 < int(move) < 4 and (self.direction is None or (int(dir) + 2) % 4 is not int(move))
 
     def get_valid_actions(self, direction = self.direction):
         x = int (self.direction)
@@ -63,6 +64,10 @@ class snake:
 
     def eat_apple(self):
         self.apples_queued += 1
+        self.apples_eaten += 1
+
+    def get_apples_eaten(self):
+        return self.apples_eaten
 
     def apply_bid(self, bid):
         self.apples_queued -= bid
