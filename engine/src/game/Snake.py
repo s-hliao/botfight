@@ -1,11 +1,12 @@
 from Queue import queue
-from Enums import Direction, Move
+from Enums import Direction
 
-class player:
-    def __init__(self):
+class snake:
+    def __init__(self, min_player_size=4):
         self.q = queue()
         self.direction = None
         self.apples_queued = 0
+        self.min_player_size = min_player_size
         
 
     def start(self, start_loc, start_size):
@@ -46,16 +47,30 @@ class player:
 
         return head_loc, move_dir
     
+    
+
+    def is_valid_bid(self, bid):
+        return a.get_length() - bid > self.min_player_size 
+
+
+    def is_valid_action(self, move, dir):
+        return 0 < int(move) < 4 and (int(dir) + 2) % 4 is not move
+
     def get_valid_actions(self, direction = self.direction):
+        x = int (self.direction)
+        return [Direction((x-1+4)%4), self.direction,  Direction((x+1)%4)]
 
 
     def eat_apple(self):
         self.apples_queued += 1
 
+    def bid(self, bid):
+        self.apples_queued -= bid
+
     def push_move(self, action):
         head_loc = self.get_head_loc()
 
-        match move_dir:
+        match action:
             case Direction.NORTH:
                 head_loc[1]-=1
             case Direction.EAST:
