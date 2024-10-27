@@ -30,7 +30,14 @@ class Board():
 
     def decide_bid(self, bidA, bidB):
         if (bidB > bidA):
-            self.a_to_play = True
+            self.a_to_play = False
+        elif(bidB==bidA):
+            self.a_to_play = np.random.rand() < 0.5 
+
+        if(self.a_to_play):
+            snake_a.apply_bid(bidA)
+        else:
+            snake_b.apply_bid(bidB)
 
 
     # accepts a tuple
@@ -179,7 +186,7 @@ class Board():
 
 
     def getRoundNum():
-        return self.turn_count % 2
+        return self.turn_count / 2
 
 
     def get_copy(self):
