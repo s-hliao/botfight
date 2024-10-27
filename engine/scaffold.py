@@ -10,5 +10,5 @@ class PlayerController:
     def bid(self, board:Board):
         return 0
 
-    def run(self, board:Board):
+    def play(self, board:Board):
         return ([], 0)

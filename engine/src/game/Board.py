@@ -9,7 +9,10 @@ from collections import Iterable
 
 
 class board():
-    def __init__(self, map):
+    #TODO add timing code from gameplay runner
+    #TODO create history class for storing replays
+    #TODO record board state changes via actions taken by each player via replay file
+    def __init__(self, map, build_history = False):
         self.snake_a = snake()
         self.snake_b = snake()
         self.apple_spawns = Queue(dim=3)
@@ -21,6 +24,7 @@ class board():
         self.turn_count = 0
         self.bid_resolved = False
         self.winner = None
+        self.build_history = build_history
 
     def a_turn(self):
         return self.a_to_play
@@ -37,7 +41,8 @@ class board():
                 self.winner = Result.PLAYER_B
             
 
-    
+    def set_build_history(self, build_history):
+        self.build_history = build_history
 
 
     def set_winner(self, result):

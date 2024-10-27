@@ -27,7 +27,7 @@ def main():
 
 
 def play_game(game_map, player_a, player_b):
-    game_board = board(game_map)    
+    game_board = board(game_map, build_history=True)    
 
     play_time = 1000
 
@@ -41,8 +41,10 @@ def play_game(game_map, player_a, player_b):
         if(not game_board.get_bid_resolved()):
             bid_timeout = 5.1
 
+            temp_board = board.get_copy()
+            temp_board.set_build_history(False)
             a_bid = 0
-            a_bid_process = Process(target=time_game_function, args=(player_a.bid, board.get_copy(), a_bid, timer))
+            a_bid_process = Process(target=time_game_function, args=(player_a.bid, temp_board, a_bid, timer))
             a_bid_process.start()
             a_bid_process.join(timeout = bid_timeout + extra_join_time)
 
@@ -54,8 +56,10 @@ def play_game(game_map, player_a, player_b):
             elif (timer > bid_timeout):
                 a_bid = 0
 
+            temp_board = board.get_copy()
+            temp_board.set_build_history(False)
             b_bid = 0
-            b_bid_process = Process(target=time_game_function, args=(player_b.bid, board.get_copy(), b_bid, timer))
+            b_bid_process = Process(target=time_game_function, args=(player_b.bid, temp_board, b_bid, timer))
             b_bid_process.start()
             b_bid_process.join(timeout = bid_timeout + extra_join_time)
 
@@ -69,8 +73,10 @@ def play_game(game_map, player_a, player_b):
             board.resolve_bid(bidA, bidB)
 
         if(board.a_turn()):
+            temp_board = board.get_copy()
+            temp_board.set_build_history(False)
             moves = None
-            a_play_process = Process(target=time_game_function, args=(player_a.play, board.get_copy(), moves, timer))
+            a_play_process = Process(target=time_game_function, args=(player_a.play, temp_board, moves, timer))
             a_play_process.start()
             a_play_process.join(timeout = a_time + extra_join_time)
 
@@ -86,8 +92,10 @@ def play_game(game_map, player_a, player_b):
                     board.set_winner(Result.PLAYER_B)
                 a_time -= timer
         else:
+            temp_board = board.get_copy()
+            temp_board.set_build_history(False)
             moves = None
-            b_play_process = Process(target=time_game_function, args=(player_b.play, board.get_copy(), moves, timer))
+            b_play_process = Process(target=time_game_function, args=(player_b.play, temp_board, moves, timer))
             b_play_process.start()
             b_play_process.join(timeout = b_time + extra_join_time)
 
