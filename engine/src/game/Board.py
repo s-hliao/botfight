@@ -205,6 +205,9 @@ class board():
                 snake_head, snake_tail = player.push_move(action)
                 if(Cell(cells[snake_head]) == Cell.APPLE):
                     player.eat_apple()
+                self.cells[snake_head] = int (head_enum)
+                if(snake_tail is not None):
+                    self.cells[snake_tail] = int (Cell.SPACE)
                 
 
                 return True

@@ -37,6 +37,7 @@ def play_game(game_map, player_a, player_b):
     extra_join_time = 1000
 
     # TODO turn history recording on for board, turn off for copy given to players
+    # TODO move timing code for moves to board
     while(game_board.getRoundNum() < 2000 and board.get_winner() is None):
         if(not game_board.get_bid_resolved()):
             bid_timeout = 5.1
