@@ -2,7 +2,7 @@ package com.example.botfightwebserver.submission;
 
 import com.example.botfightwebserver.player.Player;
 import com.example.botfightwebserver.player.PlayerRepository;
-import com.example.botfightwebserver.storage.StorageService;
+import com.example.botfightwebserver.storage.MockStorageServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class SubmissionService {
 
     private final SubmissionRepository submissionRepository;
-    private final StorageService storageService;
+    private final MockStorageServiceImpl storageService;
 
     private static final long MAX_FILE_SIZE = 50 * 1024 * 1024;
     private final PlayerRepository playerRepository;
