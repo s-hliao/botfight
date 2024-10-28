@@ -42,6 +42,7 @@ public class Player {
     private Integer numberWins=0;
     @Builder.Default
     private Integer numberLosses=0;
+    private Long currentSubmissionId;
 
     @PrePersist
     private void onCreate() {

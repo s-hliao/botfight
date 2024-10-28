@@ -2,6 +2,7 @@ package com.example.botfightwebserver.gameMatch;
 
 import com.example.botfightwebserver.player.Player;
 import com.example.botfightwebserver.player.PlayerRepository;
+import com.example.botfightwebserver.player.PlayerService;
 import com.example.botfightwebserver.submission.Submission;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +18,20 @@ import java.util.List;
 public class GameMatchService {
 
     private final GameMatchRepository gameMatchRepository;
-    private final PlayerRepository playerRepository;
+    private final PlayerService playerService;
 
     public List<GameMatch> getGameMatches() {
         return gameMatchRepository.findAll();
     }
 
     public GameMatch createMatch(Long player1Id, Long player2Id) {
-        if (!playerRepository.existsById(player1Id) || !playerRepository.existsById(player2Id)) {
-            throw new IllegalArgumentException("One or both players do not exist");
-        }
+        playerService.validatePlayers(player1Id, player2Id);
         GameMatch gameMatch = new GameMatch();
-        gameMatch.setPlayerOneId(player1Id);
-        gameMatch.setPlayerTwoId(player2Id);
+        gameMatch.setPlayerOne(playerService.getPlayerReferenceById(player1Id));
+        gameMatch.setPlayerTwo(playerService.getPlayerReferenceById(player2Id));
         gameMatch.setStatus(MATCH_STATUS.WAITING);
         return gameMatchRepository.save(gameMatch);
-
-        //rabbit logic here with New rabbit service
     }
-
 }
+
+
