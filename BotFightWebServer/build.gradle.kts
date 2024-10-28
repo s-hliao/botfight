@@ -25,6 +25,7 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("me.paulschwarz:spring-dotenv:3.0.0")
     implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("com.h2database:h2")
@@ -32,6 +33,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
 }
 
 tasks.withType<Test> {

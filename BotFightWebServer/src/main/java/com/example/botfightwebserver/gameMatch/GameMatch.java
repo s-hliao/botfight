@@ -1,6 +1,7 @@
 package com.example.botfightwebserver.gameMatch;
 
 import com.example.botfightwebserver.player.Player;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -9,15 +10,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 enum MATCH_STATUS {
     WAITING,
     IN_PROGRESS,
+    FAILED,
     PLAYER_ONE_WIN,
     PLAYER_TWO_WIN
 }
@@ -31,18 +37,27 @@ enum MATCH_STATUS {
 public class GameMatch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "player_one_id")
-    private Player playerOne;
+    @Column(name = "player_one_id")
+    private Long playerOneId;
 
-    @ManyToOne
-    @JoinColumn(name = "player_two_id")
-    private Player playerTwo;
+    @Column(name = "player_two_id")
+    private Long playerTwoId;
 
     @Enumerated(EnumType.STRING)
     private MATCH_STATUS status;
 
+    private LocalDateTime createdAt;
+    private LocalDateTime processedAt;
+    private String queueMessageId;
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+        if (status == null) {
+            status = MATCH_STATUS.WAITING;
+        }
+    }
 }
 

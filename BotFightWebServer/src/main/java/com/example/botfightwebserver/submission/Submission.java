@@ -26,7 +26,7 @@ enum SUBMISSION_VALIDITY {
 public class Submission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String submissionS3Hash;
 
