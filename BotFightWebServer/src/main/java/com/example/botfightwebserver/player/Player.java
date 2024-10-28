@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,13 +34,18 @@ public class Player {
     private LocalDateTime creationDateTime;
     @LastModifiedBy
     private LocalDateTime lastModifiedDate;
-    private Double elo;
-    private Integer matchesPlayed;
-    private Integer numberWins;
-    private Integer numberLosses;
+    @Builder.Default
+    private Double elo=1200.0;
+    @Builder.Default
+    private Integer matchesPlayed=0;
+    @Builder.Default
+    private Integer numberWins=0;
+    @Builder.Default
+    private Integer numberLosses=0;
 
     @PrePersist
     private void onCreate() {
-
+        creationDateTime = LocalDateTime.now();
+        lastModifiedDate = LocalDateTime.now();
     }
 }

@@ -1,6 +1,5 @@
 package com.example.botfightwebserver.gameMatch;
 
-import com.example.botfightwebserver.player.Player;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
