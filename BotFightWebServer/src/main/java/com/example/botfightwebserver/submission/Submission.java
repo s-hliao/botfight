@@ -37,6 +37,9 @@ public class Submission {
     @Enumerated(EnumType.STRING)
     private SUBMISSION_VALIDITY submissionValidity;
 
+    @Enumerated(EnumType.STRING)
+    private STORAGE_SOURCE source;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

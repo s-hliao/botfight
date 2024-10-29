@@ -1,6 +1,7 @@
 package com.example.botfightwebserver.gameMatch;
 
 import com.example.botfightwebserver.player.Player;
+import com.example.botfightwebserver.submission.Submission;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,6 +38,14 @@ public class GameMatch {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_two_id", nullable = false)
     private Player playerTwo;
+
+    @ManyToOne()
+    @JoinColumn(name = "submission_one_id", nullable = false)
+    private Submission submissionOne;
+
+    @ManyToOne()
+    @JoinColumn(name = "submission_two_id", nullable = false)
+    private Submission submissionTwo;
 
     @Enumerated(EnumType.STRING)
     private MATCH_STATUS status;

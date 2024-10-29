@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
 @RequestMapping("/api/v1/storage")
-@RequiredArgsConstructor
 public class StorageController {
 
-    @Qualifier("gcpStorageServiceImpl")
     private final StorageService storageService;
+
+    public StorageController(@Qualifier("gcpStorageServiceImpl") StorageService storageService) {
+        this.storageService = storageService;
+    }
 
     @GetMapping("/verify")
     public ResponseEntity<String> verifyStorage() {

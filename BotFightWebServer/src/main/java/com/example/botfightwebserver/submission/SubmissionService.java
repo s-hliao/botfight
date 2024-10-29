@@ -44,6 +44,10 @@ public class SubmissionService {
         return SubmissionDTO.fromEntity(submissionRepository.save(submission));
     }
 
+    public Submission getSubmissionReferenceById(Long id) {
+        return submissionRepository.getReferenceById(id);
+    }
+
     public void validateSubmission(Long submissionId, SUBMISSION_VALIDITY validity) {
         Submission submission = submissionRepository.getById(submissionId);
         submission.setSubmissionValidity(validity);
