@@ -3,31 +3,41 @@ package com.example.botfightwebserver.submission;
 import com.example.botfightwebserver.player.Player;
 import com.example.botfightwebserver.player.PlayerRepository;
 import com.example.botfightwebserver.storage.MockStorageServiceImpl;
+import com.example.botfightwebserver.storage.StorageService;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class SubmissionService {
 
     private final SubmissionRepository submissionRepository;
-    private final MockStorageServiceImpl storageService;
+    private final StorageService storageService;
+    private final PlayerRepository playerRepository;
+
+    public SubmissionService(SubmissionRepository submissionRepository, @Qualifier("gcpStorageServiceImpl") StorageService storageService,
+                             PlayerRepository playerRepository) {
+        this.submissionRepository = submissionRepository;
+        this.storageService = storageService;
+        this.playerRepository = playerRepository;
+    }
 
     private static final long MAX_FILE_SIZE = 50 * 1024 * 1024;
-    private final PlayerRepository playerRepository;
 
     public SubmissionDTO createSubmission(Long playerId, MultipartFile file) {
         validateFile(file);
 
         Player player = playerRepository.getReferenceById(playerId);
-        String fileIdentifierString = storageService.uploadFile(file);
+        String filePathString = storageService.uploadFile(file);
 
         Submission submission = new Submission();
         submission.setPlayer(player);
-        submission.setStorageHash(fileIdentifierString);
+        submission.setStoragePath(filePathString);
         submission.setSubmissionValidity(SUBMISSION_VALIDITY.NOT_EVALUATED);
 
         // Can be optimized if we create the DTO just using the playerID

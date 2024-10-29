@@ -28,7 +28,7 @@ public class Submission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String storageHash;
+    private String storagePath;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="player_id", nullable = false)

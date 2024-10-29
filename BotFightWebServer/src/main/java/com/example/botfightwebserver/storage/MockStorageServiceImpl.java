@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Service
-public class MockStorageServiceImpl {
+public class MockStorageServiceImpl implements  StorageService {
     public String uploadFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File is null or empty");
