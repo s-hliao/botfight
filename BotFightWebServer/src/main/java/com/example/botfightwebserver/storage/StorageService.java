@@ -5,5 +5,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface StorageService {
-    public String uploadFile(MultipartFile file);
+    public String uploadFile(Long playerId, MultipartFile file);
 }

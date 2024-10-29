@@ -33,7 +33,7 @@ public class SubmissionService {
         validateFile(file);
 
         Player player = playerRepository.getReferenceById(playerId);
-        String filePathString = storageService.uploadFile(file);
+        String filePathString = storageService.uploadFile(playerId, file);
 
         Submission submission = new Submission();
         submission.setPlayer(player);
@@ -43,6 +43,12 @@ public class SubmissionService {
         // Can be optimized if we create the DTO just using the playerID
         return SubmissionDTO.fromEntity(submissionRepository.save(submission));
     }
+
+    public void validateSubmission(Long submissionId, SUBMISSION_VALIDITY validity) {
+        Submission submission = submissionRepository.getById(submissionId);
+        submission.setSubmissionValidity(validity);
+    }
+
     public void validateFile(MultipartFile file) {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");

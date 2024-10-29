@@ -9,14 +9,13 @@ import java.util.UUID;
 
 @Service
 public class MockStorageServiceImpl implements  StorageService {
-    public String uploadFile(MultipartFile file) {
+    public String uploadFile(Long playerId, MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File is null or empty");
         }
         String fileName = file.getOriginalFilename() != null ?
             file.getOriginalFilename() : "unknown";
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        String random = UUID.randomUUID().toString().substring(0,8);
-        return String.format("%s_%s_%s", fileName, timestamp, random);
+        return String.format("PLAYER_%s/%s_%s",playerId, fileName, timestamp);
     }
 }

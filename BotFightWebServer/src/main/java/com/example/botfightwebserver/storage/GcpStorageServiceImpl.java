@@ -27,9 +27,9 @@ public class GcpStorageServiceImpl implements StorageService {
     }
 
     @Override
-    public String uploadFile(MultipartFile file) {
+    public String uploadFile(Long playerId, MultipartFile file) {
         try {
-        String filename = generateFileName(file.getOriginalFilename());
+        String filename = generateFileName(playerId, file.getOriginalFilename());
         BlobId blobId = BlobId.of(bucketName, filename);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
             .setContentType(file.getContentType())
@@ -52,9 +52,8 @@ public class GcpStorageServiceImpl implements StorageService {
         }
     }
 
-    public String generateFileName(String originalFileName) {
+    public String generateFileName(Long playerId, String originalFileName) {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        String random = UUID.randomUUID().toString().substring(0,8);
-        return String.format("%s_%s_%s", originalFileName, timestamp, random);
+        return String.format("PLAYER_%s/%s_%s",playerId,  originalFileName, timestamp);
     }
 }

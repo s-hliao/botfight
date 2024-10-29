@@ -24,12 +24,13 @@ public class GameMatchService {
         return gameMatchRepository.findAll();
     }
 
-    public GameMatch createMatch(Long player1Id, Long player2Id) {
+    public GameMatch createMatch(Long player1Id, Long player2Id, MATCH_REASON reason) {
         playerService.validatePlayers(player1Id, player2Id);
         GameMatch gameMatch = new GameMatch();
         gameMatch.setPlayerOne(playerService.getPlayerReferenceById(player1Id));
         gameMatch.setPlayerTwo(playerService.getPlayerReferenceById(player2Id));
         gameMatch.setStatus(MATCH_STATUS.WAITING);
+        gameMatch.setReason(reason);
         return gameMatchRepository.save(gameMatch);
     }
 }

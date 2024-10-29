@@ -41,6 +41,9 @@ public class GameMatch {
     @Enumerated(EnumType.STRING)
     private MATCH_STATUS status;
 
+    @Enumerated(EnumType.STRING)
+    private MATCH_REASON reason;
+
     private LocalDateTime createdAt;
     private LocalDateTime processedAt;
     private String queueMessageId;
@@ -50,6 +53,9 @@ public class GameMatch {
         createdAt = LocalDateTime.now();
         if (status == null) {
             status = MATCH_STATUS.WAITING;
+        }
+        if (reason == null) {
+            reason = MATCH_REASON.UNKNOWN;
         }
     }
 }
