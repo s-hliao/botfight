@@ -6,4 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public interface StorageService {
     public String uploadFile(Long playerId, MultipartFile file);
+
+    public void verifyAccess();
 }

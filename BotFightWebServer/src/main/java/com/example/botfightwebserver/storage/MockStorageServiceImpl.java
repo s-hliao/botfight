@@ -18,4 +18,9 @@ public class MockStorageServiceImpl implements  StorageService {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         return String.format("PLAYER_%s/%s_%s",playerId, fileName, timestamp);
     }
+
+    @Override
+    public void verifyAccess() {
+        return;
+    }
 }

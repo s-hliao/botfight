@@ -43,10 +43,9 @@ public class GcpStorageServiceImpl implements StorageService {
         }
     }
 
-    public void verifyBucketAccess() {
+    public void verifyAccess() {
         try {
             storage.get(bucketName);
-            System.out.println("Successfully accessed bucket: " + bucketName);
         } catch (Exception e) {
             throw new RuntimeException("Cannot access bucket: " + bucketName + ". Error: " + e.getMessage());
         }
