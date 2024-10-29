@@ -68,6 +68,15 @@ public class SubmissionService {
         }
     }
 
+    public void validateSubmissions(Long submission1Id, Long submission2Id) {
+        if(!submissionRepository.existsById(submission1Id) || !submissionRepository.existsById(submission2Id)) {
+            throw new IllegalArgumentException("Submission 1 or 2 does not exist");
+        }
+        if (submission1Id == submission2Id) {
+            throw new IllegalArgumentException("Submission 1 is the same as submission 2");
+        }
+    }
+
     // before overwriting the whatever the current submission is for a player, check theri current submission created time and make sure the new submisson
     // has a created time that is after.
 

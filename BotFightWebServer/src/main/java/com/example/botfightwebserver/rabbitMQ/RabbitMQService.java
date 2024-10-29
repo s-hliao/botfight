@@ -14,8 +14,7 @@ public class RabbitMQService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void enqueueGameMatchJob(GameMatch gameMatch) {
-        GameMatchJob job = GameMatchJob.fromEntity(gameMatch);
+    public void enqueueGameMatchJob(GameMatchJob job) {
         rabbitTemplate.convertAndSend(RabbitMQConfiguration.GAME_MATCH_QUEUE, job);
     }
 }

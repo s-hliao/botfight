@@ -3,6 +3,7 @@ package com.example.botfightwebserver.gameMatch;
 import com.example.botfightwebserver.player.Player;
 import com.example.botfightwebserver.player.PlayerRepository;
 import com.example.botfightwebserver.player.PlayerService;
+import com.example.botfightwebserver.rabbitMQ.RabbitMQService;
 import com.example.botfightwebserver.submission.Submission;
 import com.example.botfightwebserver.submission.SubmissionDTO;
 import com.example.botfightwebserver.submission.SubmissionService;
@@ -22,6 +23,7 @@ public class GameMatchService {
     private final GameMatchRepository gameMatchRepository;
     private final PlayerService playerService;
     private final SubmissionService submissionService;
+    private final RabbitMQService rabbitMQService;
 
     public List<GameMatch> getGameMatches() {
         return gameMatchRepository.findAll();
@@ -29,6 +31,7 @@ public class GameMatchService {
 
     public GameMatch createMatch(Long player1Id, Long player2Id, Long submission1Id, Long submission2Id, MATCH_REASON reason) {
         playerService.validatePlayers(player1Id, player2Id);
+        submissionService.validateSubmissions(submission1Id, submission2Id);
         GameMatch gameMatch = new GameMatch();
         gameMatch.setPlayerOne(playerService.getPlayerReferenceById(player1Id));
         gameMatch.setPlayerTwo(playerService.getPlayerReferenceById(player2Id));
@@ -37,6 +40,13 @@ public class GameMatchService {
         gameMatch.setStatus(MATCH_STATUS.WAITING);
         gameMatch.setReason(reason);
         return gameMatchRepository.save(gameMatch);
+    }
+
+    public GameMatchJob submitGameMatch(Long player1Id, Long player2Id, Long submission1Id, Long submission2Id, MATCH_REASON reason) {
+        GameMatch match = createMatch(player1Id, player2Id, submission1Id, submission2Id, reason);
+        GameMatchJob job = GameMatchJob.fromEntity(match);
+        rabbitMQService.enqueueGameMatchJob(job);
+        return job;
     }
 }
 
