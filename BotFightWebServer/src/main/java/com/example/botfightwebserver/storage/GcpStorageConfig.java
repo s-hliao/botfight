@@ -26,7 +26,7 @@ public class GcpStorageConfig {
 
         return StorageOptions.newBuilder()
             .setCredentials(credentials)
-            .setProjectId("propane-karma-440020-d4")  // Add your project ID here
+            .setProjectId("propane-karma-440020-d4")
             .build()
             .getService();    }
 }

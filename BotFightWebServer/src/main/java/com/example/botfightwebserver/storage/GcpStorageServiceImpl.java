@@ -36,7 +36,7 @@ public class GcpStorageServiceImpl implements StorageService {
             .build();
         Blob blob = storage.create(blobInfo, file.getBytes());
 
-        return filename;
+        return blobId.toString();
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new RuntimeException("Failed to upload file ", e);
