@@ -1,6 +1,6 @@
 from numpy import np
 
-class GameMap:
+class Map:
     def __init__(self, map_directory):
         self.startA = None
         self.startB = None

@@ -13,13 +13,16 @@ class Queue:
 
     #enqueues a 2-value move into the queue
     def push(self, move):
-        if(size+1 >= capacity):
+        if(self.size+1 >= self.capacity):
             new_array = np.zeros((self.capacity * 2, self.dim))
-            new_array[0:size, :] = self.q[np.arange(self.head, self.tail) % self.capacity, : ]
+            new_array[0:self.size, :] = self.q[np.arange(self.head, self.tail+1) % self.capacity, : ]
             self.capacity = self.capacity *2
             self.head = 0
             self.tail = self.size-1
-        self.tail = (self.tail+1) % self.capacity
+            self.q = new_array
+
+        if(self.size != 0):
+            self.tail = (self.tail+1) % self.capacity
         self.q[self.tail, :] = move
         self.size += 1 
     
@@ -35,19 +38,22 @@ class Queue:
     def push_many(self, moves):
         if(size+len(moves) >= capacity):
             new_array = np.zeros(((self.capacity +len(moves))* 2, self.dim))
-            new_array[0:size, :] = self.q[np.arange(self.head, self.tail) % self.capacity, : ]
+            new_array[0:size, :] = self.q[np.arange(self.head, self.tail+1) % self.capacity, : ]
             self.capacity = (self.capacity +len(moves))* 2
             self.head = 0
             self.tail = self.size-1
+            self.q = new_array
         self.tail = (self.tail+len(moves)) % self.capacity
-        self.q[self.tail, :] = np.flip(moves)
+        self.q[self.tail, :] = moves
         self.size += 1 
 
     def pop(self):
         if(self.size==0):
             raise IndexError("Popped on empty Queue")
+        
         data = self.q[self.head]
-        self.head = (self.head+1) % self.capacity
+        if(self.size != 1):
+           self.head = (self.head+1) % self.capacity
         self.size -= 1
         return data
 
