@@ -77,8 +77,4 @@ public class SubmissionService {
         submission.setSubmissionValidity(SUBMISSION_VALIDITY.VALID);
         submissionRepository.save(submission);
     }
-
-    // before overwriting the whatever the current submission is for a player, check theri current submission created time and make sure the new submisson
-    // has a created time that is after.
-
 }

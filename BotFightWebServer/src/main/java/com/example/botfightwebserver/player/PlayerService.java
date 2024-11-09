@@ -1,6 +1,9 @@
 package com.example.botfightwebserver.player;
 
 import com.example.botfightwebserver.Elo.EloCalculator;
+import com.example.botfightwebserver.submission.Submission;
+import com.example.botfightwebserver.submission.SubmissionService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +12,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
     private final EloCalculator eloCalculator;
+    private final SubmissionService submissionService;
 
     public List<PlayerDTO> getPlayers() {
         return playerRepository.findAll()
@@ -68,10 +73,10 @@ public class PlayerService {
         return PlayerDTO.fromEntity(playerRepository.save(player));
     }
 
-    public boolean setCurrentSubmissionIfNone(PlayerDTO playerDTO, long submissionId) {
-        Player player = playerRepository.findById(playerDTO.getId()).get();
-        if (player.getCurrentSubmissionId() == null) {
-            player.setCurrentSubmissionId(submissionId);
+    public boolean setCurrentSubmissionIfNone(Long playerId, Long submissionId) {
+        Player player = playerRepository.findById(playerId).get();
+        if (player.getCurrentSubmission() == null) {
+            player.setCurrentSubmission(submissionService.getSubmissionReferenceById(submissionId));
             return true;
         }
         return false;

@@ -92,7 +92,7 @@ public class GameMatchService {
 
     private  void handleValidationResult(PlayerDTO playerDTO, SubmissionDTO submissionDTO) {
         submissionService.validateSubmissionAfterMatch(submissionDTO.id());
-        playerService.setCurrentSubmissionIfNone(playerDTO, submissionDTO.id());
+        playerService.setCurrentSubmissionIfNone(playerDTO.getId(), submissionDTO.id());
     }
 
 
