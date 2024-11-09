@@ -3,6 +3,7 @@ class Result(Enum):
     PLAYER_A = 0
     PLAYER_B = 1
     TIE = 2
+    ERROR = 3
 
 class Direction(Enum):
     NORTH = 0

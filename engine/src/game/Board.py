@@ -8,7 +8,7 @@ from types import StringType
 from collections import Iterable
 
 
-class board():
+class Board():
     #TODO add timing code from gameplay runner
     #TODO create history class for storing replays
     #TODO record board state changes via actions taken by each player via replay file
@@ -51,12 +51,14 @@ class board():
     def get_winner(self):
         return self.winner
 
-    def load_map(self, map):
-        self.snake_a.start(map.startA, map.start_size)
-        self.snake_b.start(map.startB, map.start_size)
+    def load_map(self, game_map):
+        self.snake_a.start(game_map.startA, game_map.start_size)
+        self.snake_b.start(game_map.startB, game_map.start_size)
 
-        self.apple_spawns.push(map.apple_spawns)
-        self.cells = map.init_board
+        self.apple_spawns.push_many(game_map.apple_spawns)
+        self.cells = game_map.read_map()
+        self.cells[game_map.startA[0], game_map.startA[1]] = int(Cell.PLAYERA_HEAD)
+        self.cells[game_map.startB[0], game_map.startB[1]] = int(Cell.PLAYERB_HEAD)
 
 
     def resolve_bid(self, bidA, bidB):

@@ -1,7 +1,7 @@
 from Queue import queue
 from Enums import Direction
 
-class snake:
+class Snake:
     def __init__(self, min_player_size=4):
         self.q = queue()
         self.direction = None

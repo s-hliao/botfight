@@ -1,11 +1,14 @@
 from game.Board import board
 from game.Map import game_map
+from Enums import Result
 from multiprocessing import Process
 import time
 import sys
 import importlib
 import os
 import glob
+
+import scaffold # delete this later
 
 def main():
     # TODO read sysargv, should come from rabbitMQ
@@ -17,17 +20,44 @@ def main():
     # TODO needs to verify correctly formatted modules
     player_a_module = importlib.import_module(os.path.join(os.getcwd(), player_a_dir))
     player_b_module = importlib.import_module(os.path.join(os.getcwd(), player_b_dir))
-    game_map = game_map(map_dir)
+    map_to_play = game_map(map_dir)
 
     # TODO need to verify player exists as part of module
-    final_board = play_game(game_map, player_a.player, player_b.player)
+    final_board = play_game(map_to_play, player_a.player, player_b.player)
 
     # TODO write out final board history and result to rabbitMQ
+    
+def test_main():
+
+    map_to_play = game_map()
+    map_to_play.dim_x = 64
+    map_to_play.dim_y = 64
+    map_to_play.cells = np.empty((dim_x, dim_y))
+
+    count = 0
+    to_int = bytearray(map_string)
+    for char in range(len(map_string)):
+        map_to_play.cells[count / map_to_play.dim_y][count % map_to_play.dim_y] = to_int & mask
+        count+= 1
+    
+    map_to_play.startA = (0, 30)
+    map_to_play.startB = (0, 30)
+    map_to_play.apple_spawns = []
+    map_to_play.start_size = 4
+
+    final_board = play_game(game_map, scaffold, scaffold)
+
+    if (final_board.get_winner() == Result.PLAYER_A):
+        print("a")
+    elif(final_board.get_winner() == Result.PLAYER_B):
+        print("b")
+    else:
+        print("error")
 
 
 
-def play_game(game_map, player_a, player_b):
-    game_board = board(game_map, build_history=True)    
+def play_game(map_to_play, player_a, player_b):
+    game_board = board(map_to_playa, build_history=True)    
 
     play_time = 1000
 
@@ -136,4 +166,4 @@ def time_game_function(player_function, board, return_val, time_used):
     # return 1 for a win, -1 for b win, 0 for tie
 
 if __name__ == "__main__":
-    main()
+    test_main()
