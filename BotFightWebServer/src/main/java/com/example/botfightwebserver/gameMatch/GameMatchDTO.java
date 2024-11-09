@@ -27,7 +27,6 @@ public class GameMatchDTO {
     private MATCH_REASON reason;
     private LocalDateTime createdAt;
     private LocalDateTime processedAt;
-    private String queueMessageId;
 
     // Convert from Entity to DTO
     public static GameMatchDTO fromEntity(GameMatch gameMatch) {
@@ -41,7 +40,6 @@ public class GameMatchDTO {
             .reason(gameMatch.getReason())
             .createdAt(gameMatch.getCreatedAt())
             .processedAt(gameMatch.getProcessedAt())
-            .queueMessageId(gameMatch.getQueueMessageId())
             .build();
     }
 }

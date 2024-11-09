@@ -55,7 +55,6 @@ public class GameMatch {
 
     private LocalDateTime createdAt;
     private LocalDateTime processedAt;
-    private String queueMessageId;
 
     @PrePersist
     public void onCreate() {

@@ -53,6 +53,10 @@ public class GameMatchService {
         return GameMatchDTO.fromEntity(gameMatchRepository.getReferenceById(id));
     }
 
+    public GameMatch getReferenceById(Long id) {
+        return gameMatchRepository.getReferenceById(id);
+    }
+
     public void handleGameMatchResult(GameMatchResult result) {
         long gameMatchId = result.matchId();
         MATCH_STATUS status = result.status();
