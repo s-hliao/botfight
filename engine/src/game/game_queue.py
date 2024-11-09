@@ -18,7 +18,9 @@ class Queue:
             new_array[0:self.size, :] = self.q[np.arange(self.head, self.tail+1) % self.capacity, : ]
             self.capacity = self.capacity *2
             self.head = 0
-            self.tail = self.size-1
+            self.tail = self.size
+            if(self.size!=0):
+                self.tail = self.size-1
             self.q = new_array
 
         if(self.size != 0):
@@ -36,16 +38,22 @@ class Queue:
         return self.q[np.arange(self.head, self.tail) % self.capacity, : ]
 
     def push_many(self, moves):
-        if(size+len(moves) >= capacity):
+        if(self.size+len(moves) >= self.capacity):
             new_array = np.zeros(((self.capacity +len(moves))* 2, self.dim))
-            new_array[0:size, :] = self.q[np.arange(self.head, self.tail+1) % self.capacity, : ]
+            new_array[0:self.size, :] = self.q[np.arange(self.head, self.tail+1) % self.capacity, : ]
             self.capacity = (self.capacity +len(moves))* 2
             self.head = 0
-            self.tail = self.size-1
+            self.tail = self.size
+            if(self.size!=0):
+                self.tail -= 1
             self.q = new_array
-        self.tail = (self.tail+len(moves)) % self.capacity
-        self.q[self.tail, :] = moves
-        self.size += 1 
+
+        if(self.size!=0):
+            self.tail = (self.tail+1) % self.capacity
+        
+        self.q[np.arange(self.tail, self.tail+len(moves)) % self.capacity, :] = moves.reshape(-1, self.dim)
+        self.tail = (self.tail+len(moves)-1) % self.capacity
+        self.size += len(moves)
 
     def pop(self):
         if(self.size==0):
