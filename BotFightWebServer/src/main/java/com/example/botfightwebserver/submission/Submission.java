@@ -43,9 +43,16 @@ public class Submission {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @CreationTimestamp
+    private LocalDateTime validateAt;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
 
+    public void setSubmissionValidity(SUBMISSION_VALIDITY submissionValidity) {
+        this.submissionValidity = submissionValidity;
+        validateAt = LocalDateTime.now();
+    }
 }

@@ -19,12 +19,12 @@ public class PlayerController {
     private final PlayerService playerService;
 
     @GetMapping("/players")
-    public List<Player> getPlayers() {
+    public List<PlayerDTO> getPlayers() {
         return playerService.getPlayers();
     }
 
     @PostMapping
-    public ResponseEntity<Player> createPlayer(@RequestParam String username,
+    public ResponseEntity<PlayerDTO> createPlayer(@RequestParam String username,
                                                @RequestParam String email) {
         return ResponseEntity.ok(playerService.createPlayer(username, email));
     }

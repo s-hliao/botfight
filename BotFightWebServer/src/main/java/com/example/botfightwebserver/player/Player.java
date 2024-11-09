@@ -1,9 +1,13 @@
 package com.example.botfightwebserver.player;
 
+import com.example.botfightwebserver.submission.Submission;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -42,7 +46,12 @@ public class Player {
     private Integer numberWins=0;
     @Builder.Default
     private Integer numberLosses=0;
-    private Long currentSubmissionId;
+    @Builder.Default
+    private Integer numberDraws=0;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="current_submission_id", nullable = false)
+    private Submission currentSubmission;
 
     @PrePersist
     private void onCreate() {

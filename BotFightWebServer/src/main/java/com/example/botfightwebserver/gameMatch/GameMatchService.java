@@ -1,7 +1,8 @@
 package com.example.botfightwebserver.gameMatch;
 
-import com.example.botfightwebserver.player.Player;
-import com.example.botfightwebserver.player.PlayerRepository;
+import com.example.botfightwebserver.Elo.EloCalculator;
+import com.example.botfightwebserver.Elo.EloChanges;
+import com.example.botfightwebserver.player.PlayerDTO;
 import com.example.botfightwebserver.player.PlayerService;
 import com.example.botfightwebserver.rabbitMQ.RabbitMQService;
 import com.example.botfightwebserver.submission.Submission;
@@ -9,8 +10,6 @@ import com.example.botfightwebserver.submission.SubmissionDTO;
 import com.example.botfightwebserver.submission.SubmissionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public class GameMatchService {
     private final PlayerService playerService;
     private final SubmissionService submissionService;
     private final RabbitMQService rabbitMQService;
+    private final EloCalculator eloCalculator;
 
     public List<GameMatch> getGameMatches() {
         return gameMatchRepository.findAll();
@@ -48,6 +48,54 @@ public class GameMatchService {
         rabbitMQService.enqueueGameMatchJob(job);
         return job;
     }
-}
+
+    public GameMatchDTO getDTOById(Long id) {
+        return GameMatchDTO.fromEntity(gameMatchRepository.getReferenceById(id));
+    }
+
+    public void handleGameMatchResult(GameMatchResult result) {
+        long gameMatchId = result.matchId();
+        MATCH_STATUS status = result.status();
+        GameMatchDTO gameMatchDTO = getDTOById(gameMatchId);
+        PlayerDTO player1DTO = gameMatchDTO.getPlayerOne();
+        PlayerDTO player2DTO = gameMatchDTO.getPlayerTwo();
+
+        if (gameMatchDTO.getReason() == MATCH_REASON.LADDER) {
+            handleLadderResult(player1DTO, player2DTO, status);
+        } else if (gameMatchDTO.getReason() == MATCH_REASON.VALIDATION) {
+            SubmissionDTO submission1DTO = gameMatchDTO.getSubmissionOne();
+            handleValidationResult(player1DTO, submission1DTO);
+        }
+        setGameMatchStatus(gameMatchId, status);
+    }
+
+    public void setGameMatchStatus(Long gameMatchId, MATCH_STATUS status) {
+        GameMatch gameMatch = gameMatchRepository.findById(gameMatchId).get();
+        gameMatch.setStatus(status);
+        gameMatchRepository.save(gameMatch);
+    }
+
+    private void handleLadderResult(PlayerDTO player1DTO, PlayerDTO player2DTO, MATCH_STATUS status) {
+        // make this cleaner
+        EloChanges eloChanges = eloCalculator.calculateElo(player1DTO, player2DTO, status);
+        if (status == MATCH_STATUS.PLAYER_ONE_WIN) {
+            playerService.updatePlayerAfterLadderMatch(player1DTO, eloChanges.getPlayer1Change(), true, false);
+            playerService.updatePlayerAfterLadderMatch(player2DTO, eloChanges.getPlayer2Change(), false, false);
+        } else if (status == MATCH_STATUS.PLAYER_TWO_WIN) {
+            playerService.updatePlayerAfterLadderMatch(player1DTO, eloChanges.getPlayer1Change(), false, false);
+            playerService.updatePlayerAfterLadderMatch(player2DTO, eloChanges.getPlayer2Change(), true, false);
+        } else if (status == MATCH_STATUS.DRAW) {
+            playerService.updatePlayerAfterLadderMatch(player1DTO, eloChanges.getPlayer1Change(), false, true);
+            playerService.updatePlayerAfterLadderMatch(player2DTO, eloChanges.getPlayer2Change(), false, true);
+        }
+    }
+
+    private  void handleValidationResult(PlayerDTO playerDTO, SubmissionDTO submissionDTO) {
+        submissionService.validateSubmissionAfterMatch(submissionDTO.id());
+        playerService.setCurrentSubmissionIfNone(playerDTO, submissionDTO.id());
+    }
+
+
+    }
 
 

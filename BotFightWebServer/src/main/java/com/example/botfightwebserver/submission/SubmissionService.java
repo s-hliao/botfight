@@ -48,11 +48,6 @@ public class SubmissionService {
         return submissionRepository.getReferenceById(id);
     }
 
-    public void validateSubmission(Long submissionId, SUBMISSION_VALIDITY validity) {
-        Submission submission = submissionRepository.getById(submissionId);
-        submission.setSubmissionValidity(validity);
-    }
-
     public void validateFile(MultipartFile file) {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
@@ -75,6 +70,12 @@ public class SubmissionService {
         if (submission1Id == submission2Id) {
             throw new IllegalArgumentException("Submission 1 is the same as submission 2");
         }
+    }
+
+    public void validateSubmissionAfterMatch(long submissionId) {
+        Submission submission = submissionRepository.findById(submissionId).get();
+        submission.setSubmissionValidity(SUBMISSION_VALIDITY.VALID);
+        submissionRepository.save(submission);
     }
 
     // before overwriting the whatever the current submission is for a player, check theri current submission created time and make sure the new submisson
